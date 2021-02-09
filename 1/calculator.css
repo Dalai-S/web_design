@@ -53,3 +53,6 @@ html {
     grid-gap: 20px;
     padding: 20px;
   }
+  .m-b-25 {
+    float: right;
+    margin-bottom: 10px}

@@ -1,0 +1,19 @@
+html { 
+    box-sizing: border-box;
+    background: -webkit-gradient(linear, left top, right top, from(#f29263), to(#ee5a6f));
+    background: linear-gradient(to right, #ee5a6f, #f29263)
+}
+h1 { font-size:1.6rem; }
+   h2 { font-size:1.4rem; }
+   h4 { font-size:1.2rem; }
+   #wrapper td { padding:.75rem; }
+   #calcform { max-width:500px; padding:20px; background:#f0eedc; border:1px solid #e0e0e0; border-radius:7px; } 
+   #calcform button img { filter:invert(100%); }
+   #calcform button span { font-weight: bold; }
+   #calcform div:nth-child(3) select { font-weight:bold; }
+
+   .m-b-25 {
+    float: right;
+ margin-bottom: 10px
+
+}
