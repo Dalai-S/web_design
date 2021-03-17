@@ -14,7 +14,7 @@
 </head>
 <body>
 <div id="header">
-   <div class="m-b-25"> <img src="logo_little.jpg" class="img-radius" alt="User-Profile-Image"> </div>
+   <div class="m-b-25"> <img src="../logo_little.jpg" class="img-radius" alt="User-Profile-Image"> </div>
 <div class="btn-group" role="group">
       <button type="button" href = "/about.html" class="btn btn-secondary"><h2>About</h2></button>
       <button type="button" href="/calc/math/base-calculator.html" class="btn btn-secondary"><h2>Simple calculator</h2></button>
@@ -124,7 +124,122 @@
 
 </form>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="lib/bignum.js"></script>
+<script>
+	$(document).ready(function () {
+      $("#calgroup").hide();
+		var params = GetURLParams();
+		if (Object.keys(params).length > 0 && params.x != "") {
+			$("#x").val(params.x);
+			$("#sel1").val(params.sel1);
+			$("#sel2").val(params.sel2);
+			onconvert();
+		}
+	});		
+	function GetURLParams() {
+		var url = window.location.href;
+		var regex = /[?&]([^=#]+)=([^&#]*)/g,
+			params = {},
+			match;
+		while (match = regex.exec(url)) {
+			params[match[1]] = match[2];
+		}
+		return params;
+	}
+	function copy()
+	{
+		$("#y").select();
+		document.execCommand('copy');
+	}
 
+	function swap() {
+		var i1 = $("#sel1")[0].selectedIndex;
+		var i2 = $("#sel2")[0].selectedIndex;
+		$("#sel1")[0].selectedIndex = i2;
+		$("#sel2")[0].selectedIndex = i1;
+		$("#x").val( $("#y").val() );
+		$("#y").val("");
+	}
+   function base2decimal(x, dec, b) {
+		var txt="("+x+")<sub>"+b.toString()+"</sub> = ";
+		var d,e,minus=false;
+		var len=x.length;
+		if( x[0]=="-" ) { txt+="-["; x=x.substr(1); len--; minus=true; }
+		var idot=x.indexOf(".");
+		if( idot>=0 ) { x=x.substring(0,idot)+x.substring(idot+1,len); len--; }
+		else idot=len;
+		for(var i=0; i<len; i++) {
+         d = parseInt(x[i],b);
+			e = idot-i-1;
+			e=e.toString();
+			txt+="("+d+" \u00D7 "+b+"<sup>"+e+"</sup>)";
+			if( i<len-1 ) txt+=" + ";
+		}
+		if( minus ) txt+="]";
+		txt+=" = ("+dec+")<sub>10</sub>";
+      $("#cal1txt").html(txt);
+   }
+   function digits_after_period(x)
+   {
+      f = x.toString();
+      i = f.indexOf('.');
+      len = f.length-i-1;
+      return len;
+   }
+   function decimal2base(dec, y, b) {
+      var row;
+      $("#cal2tbl tbody tr").remove();
+      if( dec<0 ) dec=-dec;
+      dec=dec.toString();
+      var nd=dec.indexOf(".");
+      if( nd>=0 ) {
+         var txt="   Multiply the number with the base raised to the power of decimals in result:<br>";
+         txt+=dec+"&times;"+b+"<sup>5</sup> = ";
+         dec=dec*Math.pow(b,5);
+         txt+=dec;
+         $("#cal2dec").html(txt);
+      }
+      for(var n=dec,k=0; n>=1; k++) {
+         row = "<tr>";
+         row+="<td>"+n+"/"+b+"</td>";
+         row+="<td>"+Math.floor(n/b)+"</td>";
+         row+="<td>"+(n%b).toFixed()+"</td>";
+         row+="<td>"+k+"</td>";
+         row+="</tr>";
+         n = Math.floor(n/b);
+         $("#cal2tbl tbody").append(row);
+      }
+     $("#cal2result").html("= ("+y+")<sub>"+b+"</sub>");
+   }
+	function onconvert() {
+		var x = $("#x").val();
+		var b1 = $("#sel1")[0].selectedIndex+2;
+		var b2 = $("#sel2")[0].selectedIndex+2;
+		try {
+			var y = new BigNumber(x, b1);
+			$("#x").css("background-color", "white");
+		}
+		catch(err) {
+			$("#x").css("background-color", "#fff0f0");
+			$("#y").val("");
+			return;
+		}
+      var dec = y.toString(10);
+      y = y.toString(b2).toUpperCase();
+		$("#y").val( y );
+      $("#b1txt").html(b1);
+      $("#b2txt").html(b2);
+      base2decimal(x,dec,b1);
+      decimal2base(dec,y,b2);
+      if( b1==10 ) $("#cal1").hide(); else $("#cal1").show();
+      if( b2==10 ) $("#cal2").hide(); else $("#cal2").show();
+      $("#calgroup").show();
+	}
+   function onrst() {
+      $("#calgroup").hide();
+   }
+</script>
 
 </body>
 

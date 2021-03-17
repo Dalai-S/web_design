@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<script async src="/lib/tag.js"></script>
+<meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+   <link rel="stylesheet" type="text/css" href="/lib/rap.css">
+  
+   <link rel="stylesheet" a href="bootstrap/css/bootstrap.css">
+   <link href="pro_calculator.css" rel="stylesheet" media="all">
+
+</head>
+
+<body>
+   <div class="m-b-25"> <img src="../logo_little.jpg" class="img-radius" alt="User-Profile-Image"> </div>
+   <div class="btn-group" role="group">
+      <button type="button" href = "../about.html" class="btn btn-secondary"><h2>About</h2></button>
+      <button type="button" href="../calc/math/base-calculator.html" class="btn btn-secondary"><h2>Base calculator</h2></button>
+      <button type="button" href = "#calcform" class="btn btn-secondary"><h2>Base converter</h2></button>
+</div>
+<br>
+<form id="calcform" autocomplete="off">
+<div class="form-group">
+<label for="base"><h3>Select base</h3></label>
+<select id="base" name="base" class="form-control" autofocus>
+<option>2 (binary)</option>
+<option>3</option>
+<option>4</option>
+<option>5</option>
+<option>6</option>
+<option>7</option>
+<option>8 (octal)</option>
+<option>9</option>
+<option selected>10 (decimal)</option>
+<option>11</option>
+<option>12</option>
+<option>13</option>
+<option>14</option>
+<option>15</option>
+<option>16 (hex)</option>
+<option>17</option>
+<option>18</option>
+<option>19</option>
+<option>20</option>
+<option>21</option>
+<option>22</option>
+<option>23</option>
+<option>24</option>
+<option>25</option>
+<option>26</option>
+<option>27</option>
+<option>28</option>
+<option>29</option>
+<option>30</option>
+<option>31</option>
+<option>32</option>
+<option>33</option>
+<option>34</option>
+<option>35</option>
+<option>36</option>
+</select>
+</div>
+<div class="form-group">
+<label for="x"><h3>First number</h3></label>
+<input type="text" id="x" name="x" class="form-control">
+</div>
+<div class="form-group">
+<label for="op"><h3>Select operation</h3></label>
+<select id="op" class="form-control">
+<option>+</option>
+<option>-</option>
+<option>&times;</option>
+<option>&div;</option>
+</select>
+</div>
+<div class="form-group">
+<label for="x2"><h3>Second number</h3></label>
+<input type="text" id="x2" name="x2" class="form-control">
+</div>
+<div class="form-group">
+<button type="button" title="Calculate" class="btn btn-secondary" onclick="calc()"><span>= </span> Calculate</button>
+<button type="reset" title="Reset" class="btn btn-secondary"><span>&times;</span> Reset</button>
+</div>
+<div class="form-group">
+<label for="y"><h3>Result number</h3></label>
+<textarea rows="2" id="y" class="form-control" readonly></textarea>
+</div>
+<div class="form-group">
+<input type="button" value="Copy" onclick="copy()" class="btn btn-secondary">
+</div>
+</form>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="lib/bignum.js"></script>
+
+<script>
+	function copy()
+	{
+		$("#y").select();
+		document.execCommand('copy');
+	}
+	
+	function calc() {
+		var b = $("#base")[0].selectedIndex+2;
+		var op = $("#op")[0].selectedIndex;
+		var x1 = $("#x").val();
+		var x2 = $("#x2").val();
+        var y;
+		try {
+			x1 = new BigNumber(x1, b);
+			$("#x1").css("background-color", "white");
+		}
+		catch(err) {
+			$("#x1").css("background-color", "#fff0f0");
+			$("#y").val("");
+			return;
+		}
+		try {
+			x2 = new BigNumber(x2, b);
+			$("#x2").css("background-color", "white");
+		}
+		catch(err) {
+			$("#x2").css("background-color", "#fff0f0");
+			$("#y").val("");
+			return;
+		}
+      switch(op) {
+         case 0:
+               y = x1.plus(x2); //.toString(b).toUpperCase();
+               break;
+         case 1:
+               y = x1.minus(x2); //.toString(b).toUpperCase();
+               break;
+         case 2:
+               y = x1.times(x2); //.toString(b).toUpperCase();
+               break;
+         case 3:
+               y = x1.div(x2); //.toString(b).toUpperCase();
+               break;
+      }
+      BigNumber.set({ DECIMAL_PLACES: 16 });
+      y = y.toString(b).toUpperCase();
+		$("#y").val(y);
+	}
+</script>
+</body>
+
+</html>
